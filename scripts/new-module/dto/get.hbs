@@ -1,0 +1,11 @@
+import { IsString } from "class-validator";
+import { BaseQuery } from "base/base.query";
+
+export class GetAll{{Name}}Query extends BaseQuery {
+
+}
+
+export class GetOne{{Name}}Param {
+  @IsString()
+  {{name}}Id: string;
+}
