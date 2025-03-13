@@ -1,3 +1,4 @@
+import { applyDecorators } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 
 export enum DefaultScopes {

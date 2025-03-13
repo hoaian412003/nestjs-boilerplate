@@ -10,6 +10,7 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 const moduleName = program.args[0];
+const writePath = program.args[1];
 if (!moduleName) throw new Error("Module name must be provide")
 
 const metadata = {
@@ -57,7 +58,7 @@ const compileFiles = [
   }
 ]
 
-const outdir = path.join(cwd(), 'src/modules', moduleName);
+const outdir = path.join(cwd(), writePath || 'src/modules', moduleName);
 fs.mkdirSync(outdir);
 fs.mkdirSync(path.join(outdir, 'dto'))
 
