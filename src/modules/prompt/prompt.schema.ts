@@ -15,14 +15,6 @@ export class Prompt extends BaseSchema {
     required: true
   })
   content: string;
-
-  @Prop({
-    required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Organization',
-    autopopulate: true
-  })
-  organization: Organization;
 }
 
 export const PromptSchema = SchemaFactory.createForClass(Prompt);

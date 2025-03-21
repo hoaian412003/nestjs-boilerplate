@@ -13,7 +13,7 @@ export class BaseService<T extends Document> {
     return this.model.findOneAndUpdate(filter, data, options);
   }
 
-  updateOne(filter: FilterQuery<T>, data: UpdateQuery<T>) {
+  async updateOne(filter: FilterQuery<T>, data: UpdateQuery<T> & any) {
     return this.model.updateOne(filter, data);
   }
 

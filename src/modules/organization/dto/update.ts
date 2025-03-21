@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString } from "class-validator";
+import { IsOptional, IsString, ValidateNested } from "class-validator";
+import { PromptDto } from "./prompt";
+import { Type } from "class-transformer";
 
 export class UpdateOrganizationDto {
   @IsString()
@@ -17,15 +19,16 @@ export class UpdateOrganizationDto {
   website: string;
 
 
-  @IsString({
+  @ValidateNested({
     each: true
   })
-  @IsOptional()
   @ApiProperty({
-    isArray: true
+    isArray: true,
+    type: PromptDto
   })
-  prompt: Array<string>;
-
+  @IsOptional()
+  @Type(() => PromptDto)
+  prompts?: Array<PromptDto> = [];
 }
 
 export class UpdateOrganizationParams {

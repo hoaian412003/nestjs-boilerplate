@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString } from "class-validator";
+import { IsString, ValidateNested } from "class-validator";
+import { PromptDto } from "./prompt";
+import { Type } from "class-transformer";
 
 export class CreateOrganizationDto {
 
@@ -16,11 +18,13 @@ export class CreateOrganizationDto {
   website: string;
 
 
-  @IsString({
+  @ValidateNested({
     each: true
   })
   @ApiProperty({
-    isArray: true
+    isArray: true,
+    type: PromptDto
   })
-  prompt: Array<string>;
+  @Type(() => PromptDto)
+  prompts: Array<PromptDto> = [];
 }
