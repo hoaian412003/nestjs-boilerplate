@@ -11,5 +11,5 @@ export abstract class LLMService<T extends LLMAbstractDocument> extends BaseServ
 
   abstract ask(id: string, query: { prompt: string } & any): Promise<string>
 
-  abstract getTopBrand(prompt: string): Promise<Array<any>>
+  abstract getTopBrand(id: string, prompt: any): Promise<Array<any>>
 }

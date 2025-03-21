@@ -7,7 +7,7 @@ import { AskHfBody } from "./dto/ask";
 import { InferenceClient } from '@huggingface/inference'
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { z } from "zod";
-import { AIMessage } from "@langchain/core/dist/messages";
+import { AIMessage } from "@langchain/core/messages";
 
 export class HfService extends LLMService<HfDocument> {
   constructor(

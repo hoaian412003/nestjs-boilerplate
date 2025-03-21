@@ -1,11 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, Res, UseGuards } from "@nestjs/common";
-import { DefaultScopes, Resource, Scopes } from "decorators";
+import { Body, Controller, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { Permission, PublicPermission, Resource } from "decorators";
 import { AuthService } from "./auth.service";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { AuthGuard } from "@nestjs/passport";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { UserDocument } from "modules/user/user.schema";
 import { Request, Response } from "express";
 import { LoginDto } from "./dto/login.dto";
+import { RegisterUserDto } from "./dto/register.dto";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller('auth')
 @Resource('auth')
@@ -15,12 +16,21 @@ export class AuthController {
     private authService: AuthService
   ) { }
 
+  @Post('/register')
+  @Permission(PublicPermission)
+  @ApiOperation({
+    summary: 'Register new user'
+  })
+  async register(@Body() body: RegisterUserDto) {
+    return this.authService.register(body);
+  }
+
   @Post('/login')
   @ApiOperation({
     summary: 'Login user'
   })
   @UseGuards(AuthGuard('local'))
-  @Scopes(DefaultScopes.Public)
+  @Permission(PublicPermission)
   async login(@Req() req: Request & { user: UserDocument }, @Res({ passthrough: true }) res: Response, @Body() body: LoginDto) {
     const { accessToken, refreshToken } = await this.authService.sign(req.user);
 
@@ -33,9 +43,8 @@ export class AuthController {
       accessToken
     }
   }
-
   @Post('/refresh')
-  @Scopes(DefaultScopes.Public)
+  @Permission(PublicPermission)
   @ApiOperation({
     summary: 'Refresh access token'
   })

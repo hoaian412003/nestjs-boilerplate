@@ -4,7 +4,7 @@ import { GetAllExampleQuery, GetOneExampleParam } from "./dto/get";
 import { CreateExampleDto } from "./dto/create";
 import { UpdateExampleDto, UpdateExampleParams } from "./dto/update";
 import { DeleteExampleQuery } from "./dto/delete";
-import { Resource, Scopes } from "decorators";
+import { Permission, Resource, Scopes } from "decorators";
 
 @Controller('examples')
 @Resource('example')
@@ -14,13 +14,13 @@ export class ExampleController {
   ) { }
 
   @Get('')
-  @Scopes('view-all')
+  @Permission('Create')
   async getAll(@Query() query: GetAllExampleQuery) {
     return this.exampleService.getAll(query);
   }
 
   @Get(':exampleId')
-  @Scopes('view')
+  @Permission('Public')
   async getOne(@Param() param: GetOneExampleParam) {
     return this.exampleService.findById(param.exampleId);
   }
