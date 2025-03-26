@@ -21,6 +21,9 @@ export class Gpt extends BaseSchema {
     required: true
   })
   apiKey: string;
+
+  @Prop()
+  default: boolean;
 }
 
 export const GptSchema = SchemaFactory.createForClass(Gpt);

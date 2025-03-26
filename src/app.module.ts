@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongoConfig, mongoConfigLoader } from './config/database.config';
 import { APP_GUARD } from '@nestjs/core';
-import { ResourceModule } from 'modules/resource/resource.module';
 import { UserModule } from 'modules/user/user.module';
 import { AuthModule } from 'modules/auth/auth.module';
 import { jwtLoader } from 'config/jwt.config';
@@ -13,11 +12,13 @@ import { HfModule } from 'modules/llms/hf/hf.module';
 import { GptModule } from 'modules/llms/gpt/gpt.module';
 import { OrganizationModule } from 'modules/organization/organization.module';
 import { PermissionModule } from 'modules/permission/permission.module';
-import { ExampleModule } from 'modules/example/example.module';
 import { AuthGuard } from 'guards/auth';
 import { RoleModule } from 'modules/role/role.module';
-import { Prompt } from 'modules/prompt/prompt.schema';
 import { PromptModule } from 'modules/prompt/prompt.module';
+import { VisibilityModule } from 'modules/visibility/visibility.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { BullModule } from '@nestjs/bull';
+import { llmLoader } from 'config/llm.config';
 
 @Module({
   imports: [
@@ -32,11 +33,18 @@ import { PromptModule } from 'modules/prompt/prompt.module';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [mongoConfigLoader, jwtLoader],
+      load: [mongoConfigLoader, jwtLoader, llmLoader],
       expandVariables: true,
     }),
     JwtModule.register({
       global: true,
+    }),
+    ScheduleModule.forRoot(),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379
+      }
     }),
 
     OrganizationModule,
@@ -48,7 +56,8 @@ import { PromptModule } from 'modules/prompt/prompt.module';
     GptModule,
     PermissionModule,
     RoleModule,
-    ExampleModule,
+    // ExampleModule,
+    VisibilityModule
   ],
   controllers: [],
   providers: [

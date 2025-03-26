@@ -6,7 +6,7 @@ import { HfService } from "./hf.service";
 
 @Module({
   controllers: [
-    HfController
+    // HfController
   ],
   imports: [
     MongooseModule.forFeature([

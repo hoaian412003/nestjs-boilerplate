@@ -6,7 +6,7 @@ import { GptService } from "./gpt.service";
 
 @Module({
   controllers: [
-    GptController
+    // GptController
   ],
   imports: [
     MongooseModule.forFeature([

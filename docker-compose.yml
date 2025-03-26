@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Node.js Application
+  node-app:
+    build: .
+    container_name: node-app
+    ports:
+      - "3000:3000" # Expose port 3000 for the Node.js app
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI="mongodb+srv://hoaian412003:hoaian412003@fitnet.rx8fz.mongodb.net/?retryWrites=true&w=majority&appName=Fitnet"
+      - RABBITMQ_URL=amqp://rabbitmq
+    depends_on:
+      - rabbitmq
+      - redis-stack
+
+  # MongoDB Service
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo-data:/data/db
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=root
+  #     - MONGO_INITDB_ROOT_PASSWORD=password
+
+  redis-stack:
+    image: redis/redis-stack:latest
+    container_name: redis-stack
+    ports:
+      - "6379:6379"           # Redis port
+      - "8001:8001"           # RedisInsight (web UI) port
+    volumes:
+      - redis-data:/data      # Persist Redis data
+    environment:
+      - REDIS_STACK_PASSWORD=password  # Optional: Set a password for Redis
+    restart: unless-stopped
+# Volumes for persistent data
+volumes:
+  mongo-data:
+  redis-data:

@@ -8,18 +8,29 @@ import { z } from "zod";
 import { BadRequestException } from "@nestjs/common";
 import { AskGptBody } from "./dto/ask";
 import { GetTopBrandBody } from "./dto/getTopBrand";
+import { ConfigService } from "@nestjs/config";
+import { LLMConfig } from "config/llm.config";
 
 
 
 export class GptService extends LLMService<GptDocument> {
   constructor(
     @InjectModel(Gpt.name)
-    private gptModel: Model<GptDocument>
+    private gptModel: Model<GptDocument>,
+    private configService: ConfigService
   ) {
     super(gptModel)
   }
 
   async getGptModel(id: string) {
+    const config: LLMConfig = this.configService.get('llm')!;
+    if (!id) {
+      return {
+        gptModel: new OpenAI({
+          apiKey: config.gptApiKey
+        })
+      }
+    }
 
     const model = await this.findById(id);
     if (!model) throw new BadRequestException("Not found model");
@@ -43,7 +54,7 @@ export class GptService extends LLMService<GptDocument> {
     return completion.choices[0].message.content || "";
   }
 
-  async getTopBrand(id: string, body: GetTopBrandBody): Promise<any[]> {
+  async getTopBrand(id: string, body: GetTopBrandBody): Promise<{ name: string, website: string }[]> {
     const { gptModel } = await this.getGptModel(id);
     const BrandFormat = z.object({
       topBrands: z.array(

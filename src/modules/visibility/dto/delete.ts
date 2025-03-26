@@ -1,6 +1,6 @@
 import { IsString } from "class-validator";
 
-export class DeleteBrandQuery {
+export class DeleteVisibilityQuery {
 
   @IsString({
     each: true

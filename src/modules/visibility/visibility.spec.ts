@@ -3,9 +3,9 @@ import axios from "axios";
 import request from 'supertest';
 import { ConfigService } from "@nestjs/config";
 import { KeycloakConfig } from "config";
-import { Brand } from "./brand.schema";
+import { Visibility } from "./visibility.schema";
 import { createNestjsApp } from "utils/test";
-import { CreateBrandDto } from "./dto/create";
+import { CreateVisibilityDto } from "./dto/create";
 
 type LoginData = {
   username: string;
@@ -40,13 +40,13 @@ const mockLogin = async (data: LoginData) => {
     })
 }
 
-describe('Brand', () => {
+describe('Visibility', () => {
 
   let app: INestApplication
   let userToken: string;
   let adminToken: string;
-  let record: Brand;
-  const mockBody: CreateBrandDto = {};
+  let record: Visibility;
+  const mockBody: CreateVisibilityDto = {};
 
   beforeAll(async () => {
     app = await createNestjsApp();
@@ -62,48 +62,48 @@ describe('Brand', () => {
   })
 
 
-  it('[POST] /brands -> 201 because valid request', async () => {
+  it('[POST] /visibilities -> 201 because valid request', async () => {
     const response = await request(app.getHttpServer())
-      .post('/brands')
+      .post('/visibilities')
       .send(mockBody)
       .set('Authorization', 'Bearer ' + adminToken)
       .expect(201)
     record = response.body;
   })
 
-  it('[GET] /brands/:exampleId -> 200 because role is admin', () => {
+  it('[GET] /visibilities/:exampleId -> 200 because role is admin', () => {
     return request(app.getHttpServer())
-      .get('/brands/' + record._id)
+      .get('/visibilities/' + record._id)
       .set('Authorization', 'Bearer ' + adminToken)
       .expect(200)
   })
 
-  it('[GET] /brands -> 200 because role is admin', () => {
+  it('[GET] /visibilities -> 200 because role is admin', () => {
     return request(app.getHttpServer())
-      .get('/brands')
+      .get('/visibilities')
       .set('Authorization', 'Bearer ' + adminToken)
       .expect(200)
   })
 
-  it('[PUT] /brands/:exampleId -> 200 because role is admin', () => {
+  it('[PUT] /visibilities/:exampleId -> 200 because role is admin', () => {
     return request(app.getHttpServer())
-      .put('/brands/' + record._id)
+      .put('/visibilities/' + record._id)
       .send(mockBody)
       .set('Authorization', 'Bearer ' + adminToken)
       .expect(200)
   })
 
-  it('[DELETE] /brands/soft -> 200 because role is admin', () => {
+  it('[DELETE] /visibilities/soft -> 200 because role is admin', () => {
     return request(app.getHttpServer())
-      .delete('/brands/soft')
+      .delete('/visibilities/soft')
       .query({ ids: [record._id] })
       .set('Authorization', 'Bearer ' + adminToken)
       .expect(200)
   })
 
-  it('[DELETE] /brands/hard -> 200 because role is admin', () => {
+  it('[DELETE] /visibilities/hard -> 200 because role is admin', () => {
     return request(app.getHttpServer())
-      .delete('/brands/hard')
+      .delete('/visibilities/hard')
       .query({ ids: [record._id] })
       .set('Authorization', 'Bearer ' + adminToken)
       .expect(200)
